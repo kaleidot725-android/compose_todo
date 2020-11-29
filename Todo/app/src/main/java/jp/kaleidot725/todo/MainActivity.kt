@@ -1,7 +1,6 @@
 package jp.kaleidot725.todo
 
 import android.os.Bundle
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,10 +36,9 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun HomeScreen() {
     val viewModel = remember { MainViewModel() }
-
     Scaffold(
         topBar = { TopBar() },
-        floatingActionButton = { FloatingActionButton() },
+        floatingActionButton = { FabContent() },
         bodyContent = { BodyContent(viewModel) },
     )
 }
@@ -51,8 +49,10 @@ fun TopBar() {
 }
 
 @Composable
-fun FloatingActionButton() {
-    Button(onClick = {}) { Text(text = stringResource(R.string.plus)) }
+fun FabContent() {
+    FloatingActionButton(onClick = {}) {
+        Text(text = stringResource(R.string.plus))
+    }
 }
 
 @Composable
