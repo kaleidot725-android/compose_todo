@@ -8,14 +8,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import jp.kaleidot725.todo.model.Todo
 import jp.kaleidot725.todo.ui.TodoTheme
 import jp.kaleidot725.todo.ui.purple700
+import jp.kaleidot725.todo.viewModel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,10 +34,12 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun HomeScreen(name: String) {
+    val viewModel = remember { MainViewModel() }
+
     Scaffold(
         topBar = { TopBar() },
         floatingActionButton = { FloatingActionButton() },
-        bodyContent = { BodyContent() },
+        bodyContent = { BodyContent(viewModel) },
     )
 }
 
@@ -50,9 +54,9 @@ fun FloatingActionButton() {
 }
 
 @Composable
-fun BodyContent() {
-    val todos = listOf(Todo("TEST1"), Todo("TEST2"), Todo("TEST3"), Todo("TEST4"))
-    LazyColumnFor(items = todos) { todo ->
+fun BodyContent(viewModel: MainViewModel) {
+    val todos = viewModel.list.observeAsState(listOf())
+    LazyColumnFor(items = todos.value) { todo ->
         Row(Modifier.padding(8.dp).fillMaxWidth()) {
             Checkbox(checked = false, onCheckedChange = {}, Modifier.align(Alignment.CenterVertically))
             Text(text = todo.name, Modifier.padding(8.dp).align(Alignment.CenterVertically))
